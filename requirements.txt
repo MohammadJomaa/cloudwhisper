@@ -1,0 +1,19 @@
+# AWS Chatbot Requirements
+
+# Core dependencies
+flask>=2.0.0
+pyyaml>=6.0
+structlog>=21.0.0
+
+# AWS dependencies
+boto3>=1.26.0
+botocore>=1.29.0
+
+# AI dependencies
+openai>=1.0.0
+anthropic>=0.7.0
+
+# Development dependencies
+pytest>=7.0.0
+black>=22.0.0
+flake8>=5.0.0 

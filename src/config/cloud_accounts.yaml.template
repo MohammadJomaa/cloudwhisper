@@ -1,0 +1,39 @@
+# CloudWhisper AWS Accounts Configuration Template
+# Copy this file to cloud_accounts.yaml and fill in your actual AWS credentials
+
+# AWS Accounts Configuration
+# Configure your AWS accounts here
+
+aws_accounts:
+  default:
+    name: "AWS Default Account"
+    region: "us-east-1"
+    access_key: "YOUR_AWS_ACCESS_KEY_HERE"
+    secret_key: "YOUR_AWS_SECRET_KEY_HERE"
+    description: "Main AWS account"
+    
+  production:
+    name: "Production Account"
+    region: "us-west-2"
+    access_key: "YOUR_PRODUCTION_ACCESS_KEY_HERE"
+    secret_key: "YOUR_PRODUCTION_SECRET_KEY_HERE"
+    description: "Production environment"
+    
+  staging:
+    name: "Staging Account"
+    region: "eu-west-1"
+    access_key: "YOUR_STAGING_ACCESS_KEY_HERE"
+    secret_key: "YOUR_STAGING_SECRET_KEY_HERE"
+    description: "Staging environment"
+
+# Default account to use when starting the application
+default_account: "default"
+
+# Alternative: Use AWS CLI profiles
+# You can also use AWS CLI profiles instead of direct credentials:
+# aws_accounts:
+#   default:
+#     name: "AWS Default Account"
+#     region: "us-east-1"
+#     profile: "default"  # Uses AWS CLI profile
+#     description: "Main AWS account"

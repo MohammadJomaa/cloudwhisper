@@ -1,0 +1,24 @@
+# CloudWhisper AI Integration Configuration Template
+# Copy this file to ai_integration_config.yaml and fill in your actual API keys
+
+ai_integration:
+  # Claude Integration Settings
+  claude:
+    enabled: true
+    server_path: "src/mcp_server/multi_cloud_mcp_server.py"
+    timeout: 30
+    max_retries: 3
+    api_key: "YOUR_ANTHROPIC_API_KEY_HERE"  # Replace with your actual Anthropic API key
+    
+  # ChatGPT Integration Settings  
+  chatgpt:
+    enabled: true
+    server_path: "src/mcp_server/multi_cloud_mcp_server.py"
+    timeout: 30
+    max_retries: 3
+    api_key: "YOUR_OPENAI_API_KEY_HERE"  # Replace with your actual OpenAI API key
+
+# Alternative: Use environment variables
+# Set these environment variables instead of hardcoding API keys:
+# export ANTHROPIC_API_KEY="your-anthropic-key"
+# export OPENAI_API_KEY="your-openai-key"

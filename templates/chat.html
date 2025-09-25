@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudWhisper - AI-Powered AWS Chatbot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            height: 100vh; 
+            overflow: hidden;
+        }
+        .container { max-width: 1400px; margin: 0 auto; height: 100vh; display: flex; background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .sidebar { width: 350px; background: #2c3e50; color: white; padding: 20px; overflow-y: auto; }
+        .main { flex: 1; display: flex; flex-direction: column; }
+        .header { background: #f8f9fa; padding: 20px; border-bottom: 1px solid #dee2e6; }
+        .messages { flex: 1; padding: 20px; overflow-y: auto; }
+        .input-area { padding: 20px; border-top: 1px solid #dee2e6; }
+        .message { margin-bottom: 15px; display: flex; gap: 10px; }
+        .message.user { flex-direction: row-reverse; }
+        .bubble { padding: 15px 20px; border-radius: 15px; max-width: 70%; line-height: 1.6; }
+        .user .bubble { background: #007bff; color: white; }
+        .bot .bubble { background: #f8f9fa; color: #333; }
+        .bot .bubble h3, .bot .bubble h4 { margin: 15px 0 10px 0; color: #2c3e50; }
+        .bot .bubble ul, .bot .bubble ol { margin: 10px 0; padding-left: 20px; }
+        .bot .bubble li { margin: 5px 0; }
+        .bot .bubble strong { color: #2c3e50; font-weight: 600; }
+        .bot .bubble p { margin: 8px 0; }
+        .bot .bubble code { background: #f8f9fa; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #e74c3c; }
+        .bot .bubble hr { border: none; border-top: 2px solid #ecf0f1; margin: 15px 0; }
+        .input-group { display: flex; gap: 10px; }
+        .chat-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; }
+        .send-btn { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 20px; cursor: pointer; }
+        .quick-btn { display: block; width: 100%; padding: 10px; margin: 5px 0; background: rgba(255,255,255,0.1); border: none; color: white; text-align: left; cursor: pointer; }
+        .status { 
+            padding: 10px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 5px; 
+            margin-bottom: 20px; 
+            position: relative;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Pulse animation for status */
+        .status.initializing {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Typing indicator */
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            max-width: 70%;
+        }
+        
+        .typing-indicator .dots {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .typing-indicator .dot {
+            width: 8px;
+            height: 8px;
+            background: #6c757d;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-indicator .dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator .dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        /* Cloud Provider Selector */
+        .cloud-provider-selector { margin-bottom: 20px; }
+        .cloud-provider-selector h3 { margin-bottom: 10px; color: #ecf0f1; }
+        .provider-dropdown { width: 100%; padding: 8px; border-radius: 5px; border: none; background: rgba(255,255,255,0.9); color: #2c3e50; }
+        .current-provider { margin-top: 5px; font-size: 12px; color: #bdc3c7; }
+        
+        /* Account Selector */
+        .account-selector { margin-bottom: 20px; }
+        .account-selector h3 { margin-bottom: 10px; color: #ecf0f1; }
+        .account-dropdown { width: 100%; padding: 8px; border-radius: 5px; border: none; background: rgba(255,255,255,0.9); color: #2c3e50; }
+        .current-account { margin-top: 5px; font-size: 12px; color: #bdc3c7; }
+        .account-buttons { display: flex; gap: 5px; margin-top: 10px; }
+        .add-account-btn, .delete-account-btn { flex: 1; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        .add-account-btn { background: #27ae60; color: white; }
+        .delete-account-btn { background: #e74c3c; color: white; }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: white; margin: 15% auto; padding: 20px; border-radius: 10px; width: 80%; max-width: 500px; }
+        .modal h2 { margin-bottom: 20px; color: #2c3e50; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #2c3e50; font-weight: 600; }
+        .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
+        .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        .modal-btn { padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; }
+        .modal-btn.primary { background: #007bff; color: white; }
+        .modal-btn.secondary { background: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2><i class="fas fa-cloud"></i> CloudWhisper</h2>
+            <div class="status initializing" id="status">
+                <span class="loading"></span> Status: Auto-initializing...
+            </div>
+            
+            <!-- Cloud Provider Selector -->
+            <div class="cloud-provider-selector">
+                <h3><i class="fas fa-cloud"></i> Cloud Provider</h3>
+                <select class="provider-dropdown" id="providerDropdown" onchange="switchProvider()">
+                    <option value="aws">AWS</option>
+                    <option value="gcp">Google Cloud Platform</option>
+                </select>
+                <div class="current-provider" id="currentProvider">Current: AWS</div>
+            </div>
+            
+            <!-- Account Selector -->
+            <div class="account-selector">
+                <h3><i class="fas fa-users"></i> Cloud Account</h3>
+                <select class="account-dropdown" id="accountDropdown" onchange="switchAccount()">
+                    <option value="default">Default Account</option>
+                </select>
+                <div class="current-account" id="currentAccount">Current: Default Account</div>
+                <div class="account-buttons">
+                    <button class="add-account-btn" onclick="openAddAccountModal()">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                    <button class="delete-account-btn" onclick="deleteCurrentAccount()">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+            
+            <h3>Quick Actions</h3>
+            <button class="quick-btn" onclick="sendQuick('How many instances do I have?')">Compute Instances</button>
+            <button class="quick-btn" onclick="sendQuick('What storage buckets do I have?')">Storage Buckets</button>
+            <button class="quick-btn" onclick="sendQuick('Show me my monitoring alerts')">Monitoring Alerts</button>
+            <button class="quick-btn" onclick="sendQuick('How can I reduce costs?')">Cost Analysis</button>
+            <button class="quick-btn" onclick="sendQuick('What security issues do I have?')">Security Analysis</button>
+            <button class="quick-btn" onclick="initialize()">Initialize</button>
+        </div>
+        <div class="main">
+            <div class="header">
+                <h1>CloudWhisper - AI-Powered AWS Chatbot</h1>
+                <p>Ask me anything about your AWS infrastructure - I'll whisper intelligent insights</p>
+            </div>
+            <div class="messages" id="messages">
+                <div class="message bot">
+                    <div class="bubble">Welcome to CloudWhisper! Initializing automatically... Please wait while I connect to your AWS infrastructure.</div>
+                </div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="input-area">
+                <div class="input-group">
+                    <input type="text" class="chat-input" id="input" placeholder="Ask me anything..." onkeypress="handleKey(event)">
+                    <button class="send-btn" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Account Modal -->
+    <div id="addAccountModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-plus"></i> Add Cloud Account</h2>
+            <form id="addAccountForm">
+                <div class="form-group">
+                    <label for="accountName">Account Name:</label>
+                    <input type="text" id="accountName" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountId">Account ID:</label>
+                    <input type="text" id="accountId" required>
+                </div>
+                <div class="form-group">
+                    <label for="accessKey">Access Key:</label>
+                    <input type="text" id="accessKey" required>
+                </div>
+                <div class="form-group">
+                    <label for="secretKey">Secret Key:</label>
+                    <input type="password" id="secretKey" required>
+                </div>
+                <div class="form-group">
+                    <label for="region">Region:</label>
+                    <select id="region">
+                        <option value="us-east-1">US East (N. Virginia)</option>
+                        <option value="us-west-2">US West (Oregon)</option>
+                        <option value="eu-west-1">Europe (Ireland)</option>
+                        <option value="ap-southeast-1">Asia Pacific (Singapore)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" id="description">
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="modal-btn secondary" onclick="closeAddAccountModal()">Cancel</button>
+                    <button type="submit" class="modal-btn primary">Add Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let isInitialized = false;
+        let currentProvider = 'aws';
+        let currentAccount = 'default';
+
+        async function initialize() {
+            const statusEl = document.getElementById('status');
+            statusEl.innerHTML = '<span class="loading"></span> Status: Initializing...';
+            statusEl.className = 'status initializing';
+            
+            try {
+                const response = await fetch('/api/initialize', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    isInitialized = true;
+                    statusEl.innerHTML = '✅ Status: Connected';
+                    statusEl.className = 'status';
+                    addMessage('bot', '✅ CloudWhisper initialized! Ask me anything about your AWS infrastructure.');
+                } else {
+                    statusEl.innerHTML = '❌ Status: Failed';
+                    statusEl.className = 'status';
+                    addMessage('bot', '❌ Failed to initialize: ' + data.message);
+                }
+            } catch (error) {
+                statusEl.innerHTML = '❌ Status: Error';
+                statusEl.className = 'status';
+                addMessage('bot', '❌ Error: ' + error.message);
+            }
+        }
+
+        async function switchProvider() {
+            const provider = document.getElementById('providerDropdown').value;
+            currentProvider = provider;
+            document.getElementById('currentProvider').textContent = `Current: ${provider.toUpperCase()}`;
+            
+            try {
+                const response = await fetch('/api/switch_provider', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider: provider })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    addMessage('bot', `✅ Switched to ${provider.toUpperCase()} provider`);
+                    loadAccounts();
+                } else {
+                    addMessage('bot', '❌ Failed to switch provider: ' + data.error);
+                }
+            } catch (error) {
+                addMessage('bot', '❌ Error switching provider: ' + error.message);
+            }
+        }
+
+        async function switchAccount() {
+            const account = document.getElementById('accountDropdown').value;
+            currentAccount = account;
+            document.getElementById('currentAccount').textContent = `Current: ${account}`;
+            
+            try {
+                const response = await fetch('/api/switch_account', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ account_id: account })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    addMessage('bot', `✅ Switched to account: ${account}`);
+                } else {
+                    addMessage('bot', '❌ Failed to switch account: ' + data.error);
+                }
+            } catch (error) {
+                addMessage('bot', '❌ Error switching account: ' + error.message);
+            }
+        }
+
+        async function loadAccounts() {
+            try {
+                const response = await fetch('/api/accounts');
+                const data = await response.json();
+                if (data.success) {
+                    const dropdown = document.getElementById('accountDropdown');
+                    dropdown.innerHTML = '';
+                    data.accounts.forEach(account => {
+                        const option = document.createElement('option');
+                        option.value = account.id;
+                        option.textContent = account.name;
+                        dropdown.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading accounts:', error);
+            }
+        }
+
+        function openAddAccountModal() {
+            document.getElementById('addAccountModal').style.display = 'block';
+        }
+
+        function closeAddAccountModal() {
+            document.getElementById('addAccountModal').style.display = 'none';
+        }
+
+        async function deleteCurrentAccount() {
+            if (confirm('Are you sure you want to delete the current account?')) {
+                try {
+                    const response = await fetch('/api/remove_account', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ account_id: currentAccount })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        addMessage('bot', `✅ Account ${currentAccount} deleted`);
+                        loadAccounts();
+                    } else {
+                        addMessage('bot', '❌ Failed to delete account: ' + data.error);
+                    }
+                } catch (error) {
+                    addMessage('bot', '❌ Error deleting account: ' + error.message);
+                }
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('input');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            if (!isInitialized) {
+                addMessage('bot', '⚠️ Please initialize the chatbot first.');
+                return;
+            }
+            
+            addMessage('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                const data = await response.json();
+                
+                // Hide typing indicator
+                hideTypingIndicator();
+                
+                if (data.success) {
+                    addMessage('bot', data.response);
+                } else {
+                    addMessage('bot', '❌ Error: ' + data.error);
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                addMessage('bot', '❌ Error: ' + error.message);
+            }
+        }
+        
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'block';
+        }
+        
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        function sendQuick(message) {
+            document.getElementById('input').value = message;
+            sendMessage();
+        }
+
+        function addMessage(type, content) {
+            const messages = document.getElementById('messages');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerHTML = `<div class="bubble">${formatMessage(content)}</div>`;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function formatMessage(content) {
+            // Enhanced formatting function for better readability
+            let formatted = content;
+            
+            // Handle emojis and special characters
+            formatted = formatted.replace(/🖥️|📊|💰|🔒|✅|❌|⚠️|🔄|🛑|🚀|📱|🎯/g, '<span style="font-size: 1.2em;">$&</span>');
+            
+            // Handle bold text (**text**)
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #2c3e50; font-weight: 600;">$1</strong>');
+            
+            // Handle italic text (*text*)
+            formatted = formatted.replace(/\*(.*?)\*/g, '<em style="color: #7f8c8d;">$1</em>');
+            
+            // Handle main headings (## Title)
+            formatted = formatted.replace(/^## (.*$)/gm, '<h3 style="color: #2c3e50; margin: 15px 0 10px 0; font-size: 1.3em; border-bottom: 2px solid #3498db; padding-bottom: 5px;">$1</h3>');
+            
+            // Handle subheadings (### Subtitle)
+            formatted = formatted.replace(/^### (.*$)/gm, '<h4 style="color: #34495e; margin: 12px 0 8px 0; font-size: 1.1em;">$1</h4>');
+            
+            // Handle bullet points (• item)
+            formatted = formatted.replace(/^• (.*$)/gm, '<li style="margin: 5px 0; padding-left: 5px;">$1</li>');
+            
+            // Handle numbered lists (1. item)
+            formatted = formatted.replace(/^(\d+)\. (.*$)/gm, '<li style="margin: 5px 0; padding-left: 5px;">$2</li>');
+            
+            // Wrap consecutive list items in ul tags
+            formatted = formatted.replace(/(<li[^>]*>.*?<\/li>)(?:\s*(<li[^>]*>.*?<\/li>))*/gs, '<ul style="margin: 10px 0; padding-left: 20px;">$&</ul>');
+            
+            // Handle code blocks (```code```)
+            formatted = formatted.replace(/```(.*?)```/gs, '<code style="background: #f8f9fa; padding: 8px 12px; border-radius: 4px; font-family: monospace; color: #e74c3c; border: 1px solid #dee2e6; display: block; margin: 10px 0;">$1</code>');
+            
+            // Handle inline code (`code`)
+            formatted = formatted.replace(/`([^`]+)`/g, '<code style="background: #f8f9fa; padding: 2px 6px; border-radius: 3px; font-family: monospace; color: #e74c3c; font-size: 0.9em;">$1</code>');
+            
+            // Handle horizontal rules (---)
+            formatted = formatted.replace(/^---$/gm, '<hr style="border: none; border-top: 2px solid #ecf0f1; margin: 15px 0;">');
+            
+            // Handle line breaks and paragraphs
+            formatted = formatted.replace(/\n\n/g, '</p><p style="margin: 10px 0;">');
+            formatted = formatted.replace(/\n/g, '<br>');
+            
+            // Wrap in paragraph tags if not already wrapped
+            if (!formatted.startsWith('<h') && !formatted.startsWith('<ul') && !formatted.startsWith('<code') && !formatted.startsWith('<hr')) {
+                formatted = '<p style="margin: 10px 0;">' + formatted + '</p>';
+            }
+            
+            // Handle success/error messages with special styling
+            formatted = formatted.replace(/✅ (.*)/g, '<span style="color: #27ae60; font-weight: 600;">✅ $1</span>');
+            formatted = formatted.replace(/❌ (.*)/g, '<span style="color: #e74c3c; font-weight: 600;">❌ $1</span>');
+            formatted = formatted.replace(/⚠️ (.*)/g, '<span style="color: #f39c12; font-weight: 600;">⚠️ $1</span>');
+            
+            return formatted;
+        }
+
+        function handleKey(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Handle form submission for adding accounts
+        document.getElementById('addAccountForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('accountName').value,
+                account_id: document.getElementById('accountId').value,
+                access_key: document.getElementById('accessKey').value,
+                secret_key: document.getElementById('secretKey').value,
+                region: document.getElementById('region').value,
+                description: document.getElementById('description').value,
+                provider: currentProvider
+            };
+            
+            try {
+                const response = await fetch('/api/add_account', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    addMessage('bot', `✅ Account ${formData.name} added successfully`);
+                    closeAddAccountModal();
+                    loadAccounts();
+                    // Clear form
+                    document.getElementById('addAccountForm').reset();
+                } else {
+                    addMessage('bot', '❌ Failed to add account: ' + data.error);
+                }
+            } catch (error) {
+                addMessage('bot', '❌ Error adding account: ' + error.message);
+            }
+        });
+
+        // Load accounts and auto-initialize on page load
+        window.onload = function() {
+            loadAccounts();
+            // Show auto-initialization message
+            addMessage('bot', '🔄 Auto-initializing CloudWhisper... Please wait...');
+            // Auto-initialize after a short delay to ensure everything is loaded
+            setTimeout(() => {
+                initialize();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
