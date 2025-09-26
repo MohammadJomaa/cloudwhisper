@@ -339,7 +339,7 @@ def create_html_template():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Cloud AI Chatbot - Professional Interface</title>
+    <title>CloudWhisper - AI-Powered AWS Chatbot</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -397,7 +397,7 @@ def create_html_template():
 <body>
     <div class="container">
         <div class="sidebar">
-            <h2><i class="fas fa-cloud"></i> Multi-Cloud Chatbot</h2>
+            <h2><i class="fas fa-cloud"></i> CloudWhisper</h2>
             <div class="status" id="status">Status: Initializing...</div>
             
             <!-- Cloud Provider Selector -->
@@ -437,7 +437,7 @@ def create_html_template():
         </div>
         <div class="main">
             <div class="header">
-                <h1>Multi-Cloud AI Chatbot</h1>
+                <h1>CloudWhisper - AI-Powered AWS Chatbot</h1>
                 <p>Ask me anything about your AWS, GCP, or other cloud infrastructure</p>
             </div>
             <div class="messages" id="messages">
@@ -509,7 +509,7 @@ def create_html_template():
                 if (data.success) {
                     isInitialized = true;
                     document.getElementById('status').textContent = 'Status: Connected';
-                    addMessage('bot', '✅ Multi-cloud chatbot initialized! Ask me anything about your cloud infrastructure.');
+                    addMessage('bot', '✅ CloudWhisper initialized! Ask me anything about your AWS infrastructure.');
                 } else {
                     document.getElementById('status').textContent = 'Status: Failed';
                     addMessage('bot', '❌ Failed to initialize: ' + data.message);
@@ -733,14 +733,14 @@ if __name__ == '__main__':
     if not os.path.exists('templates/chat.html'):
         create_html_template()
     
-    print("🚀 Starting Professional Multi-Cloud Chatbot Web UI...")
+    print("🚀 Starting CloudWhisper Web UI...")
     print("📱 Open your browser and go to: http://localhost:5001")
     print("🎯 Features:")
     print("   • Modern, responsive design")
     print("   • Real-time chat interface")
     print("   • Professional styling")
     print("   • Conversation history")
-    print("   • Multi-cloud support (AWS, GCP)")
+    print("   • AWS-focused with multi-account support")
     print("   • AI-powered cloud analysis")
     print("   • Account management")
     

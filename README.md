@@ -17,7 +17,7 @@
 - 🔒 **Secure**: Direct AWS credentials or profile support
 - ⚡ **Fast**: Real-time responses with comprehensive data
 
-## 🎯 **What Can AWSight Do?**
+## 🎯 **What Can CloudWhisper Do?**
 
 ### **Infrastructure Analysis**
 - 📈 **Resource Overview**: Get instant overview of all your AWS resources
@@ -162,13 +162,13 @@ cloudwhisper/
 │   │   ├── ai_integration_config.yaml    # AI API configuration
 │   │   └── cloud_accounts.yaml          # AWS account configuration
 │   ├── mcp_server/
-│   │   └── multi_cloud_mcp_server.py     # AWS MCP server
+│   │   └── multi_cloud_mcp_server.py     # CloudWhisper MCP server
 │   ├── aws_integration/
 │   │   └── aws_client.py                 # AWS client implementation
 │   ├── cloud_integration/
 │   │   └── base_client.py                # Base cloud client
 │   └── chatbot/
-│       └── multi_cloud_chatbot.py       # AI chatbot implementation
+│       └── multi_cloud_chatbot.py       # CloudWhisper AI chatbot
 ├── templates/
 │   └── chat.html                         # Web UI template
 ├── tests/                                # Comprehensive test suite
@@ -263,7 +263,7 @@ ai_integration:
 
 ## 🧪 **Testing**
 
-AWSight includes a comprehensive test suite:
+CloudWhisper includes a comprehensive test suite:
 
 ```bash
 # Run all tests

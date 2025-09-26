@@ -1,6 +1,6 @@
-# 🧪 Multi-Cloud MCP Project - Testing Guide
+# 🧪 CloudWhisper - Testing Guide
 
-This document provides comprehensive information about testing the Multi-Cloud MCP project.
+This document provides comprehensive information about testing the CloudWhisper project.
 
 ## 📋 Test Overview
 
@@ -75,7 +75,7 @@ tests/
 
 **Coverage**:
 - MCP server to AI chatbot communication
-- Multi-cloud provider switching
+- AWS account switching
 - Data flow from cloud APIs to AI analysis
 - Error handling in integration scenarios
 
@@ -288,7 +288,7 @@ jobs:
 ### Project Documentation
 - [README.md](README.md) - Project overview
 - [MULTI_ACCOUNT_SETUP.md](MULTI_ACCOUNT_SETUP.md) - AWS setup
-- [MULTI_CLOUD_SETUP.md](MULTI_CLOUD_SETUP.md) - Multi-cloud setup
+- [MULTI_CLOUD_SETUP.md](MULTI_CLOUD_SETUP.md) - Cloud setup
 
 ## 🎉 Success Criteria
 

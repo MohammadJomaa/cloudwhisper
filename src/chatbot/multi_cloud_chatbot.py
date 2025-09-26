@@ -609,7 +609,7 @@ Please provide a comprehensive, well-formatted analysis based on the cloud data 
             return f"❌ Error in basic analysis: {str(e)}"
     
     def run(self):
-        """Run the multi-cloud chatbot."""
+        """Run the CloudWhisper chatbot."""
         try:
             while True:
                 try:

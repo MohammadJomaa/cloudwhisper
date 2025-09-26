@@ -255,7 +255,7 @@ class CloudWhisperMCPServer:
                     "tools": {}
                 },
                 "serverInfo": {
-                    "name": "Multi-Cloud MCP Server",
+                    "name": "CloudWhisper MCP Server",
                     "version": "1.0.0"
                 }
             }

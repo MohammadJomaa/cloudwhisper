@@ -1,1 +1,1 @@
-# Test package for Multi-Cloud MCP Project
+# Test package for CloudWhisper Project
