@@ -3,9 +3,10 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![AWS](https://img.shields.io/badge/AWS-EC2%20%7C%20S3%20%7C%20CloudWatch-orange.svg)](https://aws.amazon.com)
 [![AI](https://img.shields.io/badge/AI-ChatGPT%20%7C%20Claude-green.svg)](https://openai.com)
+[![MCP](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-purple.svg)](https://modelcontextprotocol.io)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **CloudWhisper** is an intelligent AI-powered chatbot that whispers real-time insights and analysis of your AWS infrastructure. Ask questions about your EC2 instances, S3 buckets, CloudWatch alarms, and get AI-powered recommendations for optimization, security, and cost management.
+> **CloudWhisper** is an intelligent AI-powered chatbot that whispers real-time insights and analysis of your AWS infrastructure. Built on the **Model Context Protocol (MCP)**, it provides seamless communication between AI models and cloud services. Ask questions about your EC2 instances, S3 buckets, CloudWatch alarms, and get AI-powered recommendations for optimization, security, and cost management.
 
 ## ✨ **Why CloudWhisper?**
 
@@ -16,6 +17,7 @@
 - 💬 **Natural Language**: Ask questions in plain English
 - 🔒 **Secure**: Direct AWS credentials or profile support
 - ⚡ **Fast**: Real-time responses with comprehensive data
+- 🚀 **MCP-Powered**: Built on Model Context Protocol for seamless AI-cloud integration
 
 ## 🎯 **What Can CloudWhisper Do?**
 
@@ -40,6 +42,13 @@
 - 🎯 Account-specific analysis and recommendations
 
 ## 🚀 **Quick Start**
+
+### **What is MCP?**
+CloudWhisper is built on the **Model Context Protocol (MCP)**, a standardized protocol that enables AI models to securely connect to external data sources and tools. This allows CloudWhisper to:
+- 🔗 **Seamlessly connect** AI models to AWS services
+- 🛡️ **Secure communication** between AI and cloud APIs
+- 🔄 **Real-time data access** without compromising security
+- 🎯 **Contextual responses** based on live infrastructure data
 
 ### **Prerequisites**
 - Python 3.8 or higher
@@ -162,13 +171,13 @@ cloudwhisper/
 │   │   ├── ai_integration_config.yaml    # AI API configuration
 │   │   └── cloud_accounts.yaml          # AWS account configuration
 │   ├── mcp_server/
-│   │   └── multi_cloud_mcp_server.py     # CloudWhisper MCP server
+│   │   └── multi_cloud_mcp_server.py     # CloudWhisper MCP server (MCP protocol implementation)
 │   ├── aws_integration/
 │   │   └── aws_client.py                 # AWS client implementation
 │   ├── cloud_integration/
 │   │   └── base_client.py                # Base cloud client
 │   └── chatbot/
-│       └── multi_cloud_chatbot.py       # CloudWhisper AI chatbot
+│       └── multi_cloud_chatbot.py       # CloudWhisper AI chatbot (MCP client)
 ├── templates/
 │   └── chat.html                         # Web UI template
 ├── tests/                                # Comprehensive test suite
@@ -181,6 +190,23 @@ cloudwhisper/
 ## 🔧 **Configuration**
 
 **💡 Priority Order:** Environment Variables > Configuration Files
+
+### **How MCP Works in CloudWhisper**
+
+CloudWhisper uses the **Model Context Protocol (MCP)** to create a secure bridge between AI models and AWS services:
+
+1. **🤖 AI Model** (ChatGPT/Claude) sends requests to CloudWhisper
+2. **🔗 MCP Server** translates AI requests into AWS API calls
+3. **☁️ AWS Services** return real-time infrastructure data
+4. **📊 Data Processing** formats and analyzes the data
+5. **🧠 AI Analysis** generates intelligent insights and recommendations
+6. **💬 Response** delivers contextual, actionable advice
+
+This architecture ensures:
+- **🔒 Security**: No direct AI-to-AWS communication
+- **⚡ Performance**: Optimized data flow and caching
+- **🎯 Context**: AI gets relevant, real-time data
+- **🛡️ Control**: You control what data AI can access
 
 ### **Option 1: Environment Variables (Recommended)**
 Set these environment variables and skip configuration files:
@@ -397,6 +423,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **OpenAI** for ChatGPT API
 - **Anthropic** for Claude API
 - **AWS** for comprehensive cloud services
+- **Model Context Protocol (MCP)** for AI-cloud communication
 - **Flask** for the web framework
 - **Boto3** for AWS integration
 

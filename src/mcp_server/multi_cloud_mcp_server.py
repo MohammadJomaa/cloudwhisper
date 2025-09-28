@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 CloudWhisper MCP Server - AWS cloud services integration
+Built on Model Context Protocol (MCP) for seamless AI-cloud communication
 """
 
 import json

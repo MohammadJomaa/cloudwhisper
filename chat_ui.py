@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 CloudWhisper - AI-Powered AWS Chatbot Web UI
+Built on Model Context Protocol (MCP) for seamless AI-cloud communication
 """
 
 import os

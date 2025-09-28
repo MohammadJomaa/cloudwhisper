@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-AWS AI Chatbot - Focused on AWS cloud services
+CloudWhisper AI Chatbot - AWS-focused with MCP integration
+Built on Model Context Protocol (MCP) for seamless AI-cloud communication
 """
 
 import json
