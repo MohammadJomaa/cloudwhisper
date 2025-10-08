@@ -19,6 +19,14 @@
 - ⚡ **Fast**: Real-time responses with comprehensive data
 - 🚀 **MCP-Powered**: Built on Model Context Protocol for seamless AI-cloud integration
 
+## 📸 **See It In Action**
+
+<div align="center">
+  <img src="Dashboard.png" alt="CloudWhisper Dashboard" width="800"/>
+  
+  *CloudWhisper's modern web interface with real-time AWS infrastructure analysis*
+</div>
+
 ## 🎯 **What Can CloudWhisper Do?**
 
 ### **Infrastructure Analysis**
@@ -152,15 +160,24 @@ Navigate to `http://localhost:5001` and start chatting!
 ## 🎨 **Screenshots**
 
 ### **Web Interface**
-- Modern, responsive design
-- Real-time chat with AI
-- Account switching
-- Conversation history
+
+![CloudWhisper Dashboard](Dashboard.png)
+
+**Features shown in the screenshot above:**
+- 🎨 **Modern, responsive design** with gradient background
+- 💬 **Real-time chat interface** with AI-powered responses
+- 🔄 **AWS account switching** in the sidebar
+- 📊 **Live infrastructure data** and insights
+- 🎯 **Quick action buttons** for common queries (Compute Instances, Storage Buckets, etc.)
+- ✅ **Status indicators** with loading animations
+- 🌟 **CloudWhisper branding** with professional UI elements
+- 📱 **Responsive layout** that works on desktop and mobile
 
 ### **Command Line Interface**
 - Interactive terminal-based chat
 - Quick responses
 - Full AWS data access
+- AI-powered analysis in your terminal
 
 ## 📁 **Project Structure**
 
