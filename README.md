@@ -8,6 +8,20 @@
 
 > **CloudWhisper** is an intelligent AI-powered chatbot that whispers real-time insights and analysis of your AWS infrastructure. Built on the **Model Context Protocol (MCP)**, it provides seamless communication between AI models and cloud services. Ask questions about your EC2 instances, S3 buckets, CloudWatch alarms, and get AI-powered recommendations for optimization, security, and cost management.
 
+## 💭 **The Vision: What If Infrastructure Could Talk?**
+
+Imagine asking your infrastructure questions like you'd ask a colleague:
+
+> *"What are my EC2 instance IPs?"*
+> 
+> *"How much am I spending on S3?"*
+> 
+> *"Are there any security vulnerabilities?"*
+
+And getting instant, intelligent answers. **Not raw JSON. Not CloudWatch graphs. Actual insights.**
+
+That's the vision behind CloudWhisper.
+
 ## ✨ **Why CloudWhisper?**
 
 - 🤖 **AI-Powered Analysis**: Get intelligent insights from ChatGPT or Claude
